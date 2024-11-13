@@ -7,7 +7,10 @@ public class GameConfig : ScriptableObject
     [SerializeField] private Sprite[] cardImageSprites;
     [SerializeField] private Sprite cardBackSprite;
 
-    [Header("UI")] [SerializeField] private int fieldSpacing = 20;
+    [Header("UI")] 
+    [SerializeField] private int fieldSpacing = 20;
+
+    [SerializeField] private int maxFieldSideDimension = 8;
       
     //Sprites
     public Sprite[] CardImageSprites => cardImageSprites;
@@ -15,4 +18,5 @@ public class GameConfig : ScriptableObject
     
     //UI
     public int FieldSpacing => fieldSpacing;
+    public int MaxFieldSideDimension => maxFieldSideDimension;
 }

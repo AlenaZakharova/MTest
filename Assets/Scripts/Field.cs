@@ -3,56 +3,60 @@ using System.Linq;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 
 public class Field : MonoBehaviour, IField
 {
-    [SerializeField] private Card card;
+    [SerializeField] private Card cardPrefab;
+    [SerializeField] private GameObject rowPrefab;
 
-    private List<HorizontalLayoutGroup> _rows = new List<HorizontalLayoutGroup>{ };
-    private List<ICard> _cards = new List<ICard>();
+    private List<GameObject> _rows = new List<GameObject>{ };
+    private List<GameObject> _cards = new List<GameObject>();
     private Transform _fieldTransform;
 
-    private GameConfig config;
+    private GameConfig _config;
     
+    public void SetUp(GameConfig gameConfig)
+    {
+        _config = gameConfig;
+    }
+
     private void OnEnable()
     {
         _fieldTransform = transform;
     }
 
-    public void Init(GameConfig gameConfig)
-    {
-        config = gameConfig;
-    }
-
     public void RebuildField(int width, int height)
     {
-        _rows.Clear();
-        _cards.Clear();
-        _fieldTransform.gameObject.DestroyChildren();
+        if(_rows.Count > 0 || _cards.Count > 0)
+            DespawnFieldChildren();
         
         for (int i = 0; i < height; i++)
         {
-            var rowGameObject = new GameObject();
+            var rowGameObject = Lean.Pool.LeanPool.Spawn(rowPrefab);
             rowGameObject.transform.SetParent(_fieldTransform);
-            var horizontalLGroup = rowGameObject.AddComponent<HorizontalLayoutGroup>();
-            horizontalLGroup.spacing = config.FieldSpacing;
+            _rows.Add(rowGameObject);
             for (int j = 0; j < width; j++)
             {
-                var newCard = Instantiate(card);
+                var newCard = Lean.Pool.LeanPool.Spawn(cardPrefab);
                 {
-                    newCard.transform.SetParent(horizontalLGroup.transform);
-                    _cards.Add(newCard);
+                    newCard.transform.SetParent(rowGameObject.transform);
+                    _cards.Add(newCard.gameObject);
                 }
             }
         }
     }
-}
-
-public static class GameObjectExtensions
-{
-    public static void DestroyChildren(this GameObject t)
+    private void DespawnFieldChildren()
     {
-        t.transform.Cast<Transform>().ToList().ForEach(c => Object.Destroy(c.gameObject));
+        _fieldTransform.GetComponentsInChildren<Card>().ToList().ForEach(card =>
+        {
+            _cards.Remove(card.gameObject);
+            Lean.Pool.LeanPool.Despawn(card);
+        });
+        
+        _fieldTransform.GetComponentsInChildren<HorizontalLayoutGroup>().ToList().ForEach(row =>
+        {
+            _rows.Remove(row.gameObject);
+            Lean.Pool.LeanPool.Despawn(row);
+        });
     }
 }

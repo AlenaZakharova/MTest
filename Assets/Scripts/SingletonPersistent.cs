@@ -3,7 +3,7 @@
 public class SingletonPersistent<T> : MonoBehaviour
     where T : Component
 {
-    [SerializeField] private bool _dontDestroyOnLoad;
+    [SerializeField] private bool dontDestroyOnLoad;
         
     public static T Instance { get; private set; }
     
@@ -12,7 +12,7 @@ public class SingletonPersistent<T> : MonoBehaviour
         if (Instance == null)
         {
             Instance = this as T;
-            if(_dontDestroyOnLoad)
+            if(dontDestroyOnLoad)
                 DontDestroyOnLoad(gameObject);
         }
         else

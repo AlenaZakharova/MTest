@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,14 +7,14 @@ public class Card : MonoBehaviour, ICard
     [SerializeField] private Image cardImage;
     [SerializeField] private Button cardButton;
 
-    private Sprite frontSideSprite;
-    private Sprite backSideSprite;
+    private Sprite _frontSideSprite;
+    private Sprite _backSideSprite;
 
 
     public void SetUp(Sprite backSide, Sprite frontSide)
     {
-        this.frontSideSprite = frontSide;
-        this.backSideSprite = backSide;
+        this._frontSideSprite = frontSide;
+        this._backSideSprite = backSide;
     }
 
     public void Hide()
@@ -29,7 +27,7 @@ public class Card : MonoBehaviour, ICard
     {
         cardButton.interactable = false;
         //rotate card
-        cardImage.sprite = frontSideSprite;
+        cardImage.sprite = _frontSideSprite;
         cardButton.interactable = true;
     }
 
@@ -37,7 +35,7 @@ public class Card : MonoBehaviour, ICard
     {
         cardButton.interactable = false;
         //rotate card
-        cardImage.sprite = frontSideSprite;
+        cardImage.sprite = _frontSideSprite;
         cardButton.interactable = true;
     }
 }

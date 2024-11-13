@@ -14,13 +14,21 @@ public class Menu: MonoBehaviour, IMainMenu
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button stopGameButton;
     [SerializeField] private GameObject startMenuParent;
-    
+
+    private GameConfig _config;
 
     public event Action StartGame;
     public event Action StopGame;
-        
+
     public int FieldWidth => (int)widthSlider.value;
     public int FieldHeight => (int)heightSlider.value;
+
+    public void SetUp(GameConfig gameConfig)
+    {
+        _config = gameConfig;
+        heightSlider.maxValue = _config.MaxFieldSideDimension;
+        widthSlider.maxValue = _config.MaxFieldSideDimension;
+    }
 
     private void OnEnable()
     {
