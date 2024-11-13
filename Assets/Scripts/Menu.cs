@@ -12,9 +12,12 @@ public class Menu: MonoBehaviour, IMainMenu
     [SerializeField] private TextMeshProUGUI heightValue;
     [SerializeField] private TextMeshProUGUI widthValue;
     [SerializeField] private Button startGameButton;
+    [SerializeField] private Button stopGameButton;
+    [SerializeField] private GameObject startMenuParent;
     
 
     public event Action StartGame;
+    public event Action StopGame;
         
     public int FieldWidth => (int)widthSlider.value;
     public int FieldHeight => (int)heightSlider.value;
@@ -22,6 +25,7 @@ public class Menu: MonoBehaviour, IMainMenu
     private void OnEnable()
     {
         startGameButton.onClick.AddListener(startGameButtonOnClick);
+        stopGameButton.onClick.AddListener(stopGameButtonOnClick);
         heightSlider.onValueChanged.AddListener(UpdateHeight); 
         widthSlider.onValueChanged.AddListener(UpdateWidth); 
         
@@ -31,7 +35,13 @@ public class Menu: MonoBehaviour, IMainMenu
 
     private void startGameButtonOnClick()
     {
+        startMenuParent.SetActive(false);
         StartGame!.Invoke();
+    }
+    private void stopGameButtonOnClick()
+    {
+        startMenuParent.SetActive(true);
+        StopGame!.Invoke();
     }
 
     private void OnDisable()

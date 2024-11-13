@@ -13,6 +13,7 @@ public class Game
         _field = field;
 
         _menu.StartGame += OnStartGame;
+        _menu.StopGame += OnStopGame;
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
     }
 
@@ -20,10 +21,18 @@ public class Game
     {
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
     }
+    
+    private void OnStopGame()
+    {
+        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
+    }
 
     ~Game()
     {
-        if(_menu != null)
+        if (_menu != null)
+        {
             _menu!.StartGame -= OnStartGame;
+            _menu!.StopGame -= OnStopGame;
+        }
     }
 }
