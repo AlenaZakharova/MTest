@@ -10,11 +10,13 @@ public class Field : MonoBehaviour, IField
     [SerializeField] private GameObject rowPrefab;
 
     private List<GameObject> _rows = new List<GameObject>{ };
-    private List<GameObject> _cards = new List<GameObject>();
+    private List<Card> _cards = new List<Card>();
     private Transform _fieldTransform;
 
     private GameConfig _config;
-    
+
+    public IReadOnlyList<ICard> Cards => _cards;
+
     public void SetUp(GameConfig gameConfig)
     {
         _config = gameConfig;
@@ -40,16 +42,17 @@ public class Field : MonoBehaviour, IField
                 var newCard = Lean.Pool.LeanPool.Spawn(cardPrefab);
                 {
                     newCard.transform.SetParent(rowGameObject.transform);
-                    _cards.Add(newCard.gameObject);
+                    _cards.Add(newCard);
                 }
             }
         }
     }
+
     private void DespawnFieldChildren()
     {
         _fieldTransform.GetComponentsInChildren<Card>().ToList().ForEach(card =>
         {
-            _cards.Remove(card.gameObject);
+            _cards.Remove(card);
             Lean.Pool.LeanPool.Despawn(card);
         });
         

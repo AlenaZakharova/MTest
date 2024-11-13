@@ -5,16 +5,30 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour, ICard
 {
     [SerializeField] private Image cardImage;
+    [SerializeField] private Image cardBackImage;
     [SerializeField] private Button cardButton;
 
     private Sprite _frontSideSprite;
     private Sprite _backSideSprite;
 
+    private bool _cardUpSide = false;
+
 
     public void SetUp(Sprite backSide, Sprite frontSide)
     {
-        this._frontSideSprite = frontSide;
-        this._backSideSprite = backSide;
+        _frontSideSprite = frontSide;
+        _backSideSprite = backSide;
+        
+        cardBackImage.sprite = _backSideSprite;
+        cardImage.sprite = _frontSideSprite;
+    }
+
+    public void OnCardClicked()
+    {
+        if (_cardUpSide)
+            ShowBack();
+        else
+            ShowFront();
     }
 
     public void Hide()
@@ -25,17 +39,17 @@ public class Card : MonoBehaviour, ICard
 
     public void ShowFront()
     {
-        cardButton.interactable = false;
         //rotate card
-        cardImage.sprite = _frontSideSprite;
-        cardButton.interactable = true;
+        cardBackImage.gameObject.SetActive(false);
+        cardImage.gameObject.SetActive(true);
+        _cardUpSide = true;
     }
 
     public void ShowBack()
     {
-        cardButton.interactable = false;
         //rotate card
-        cardImage.sprite = _frontSideSprite;
-        cardButton.interactable = true;
+        cardBackImage.gameObject.SetActive(true);
+        cardImage.gameObject.SetActive(false);
+        _cardUpSide = false;
     }
 }

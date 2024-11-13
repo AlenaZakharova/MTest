@@ -1,10 +1,14 @@
-﻿using Interfaces;
+﻿using System.Collections.Generic;
+using Interfaces;
+using UnityEngine;
 
 public class Game
 {
     private GameConfig _config;
     private IMainMenu _menu;
     private IField _field;
+    
+    private List<int> _cardValues = new List<int>();
         
     public Game(IField field, IMainMenu menu, GameConfig config)
     {
@@ -20,6 +24,19 @@ public class Game
     private void OnStartGame()
     {
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
+        _cardValues.Clear();
+        var cardsCount = _field.Cards.Count;
+        for (var i = 0; i < cardsCount / 2; i++)
+        {
+            var spriteIndex = Random.Range(0, _config.CardImageSprites.Length - 1);
+            _cardValues.Add(spriteIndex);
+            _cardValues.Add(spriteIndex);
+        }
+        _cardValues.Shuffle();
+
+        for (var i = 0; i < cardsCount; i++)
+            _field.Cards[i].SetUp(_config.CardBackSprite, _config.CardImageSprites[_cardValues[i]]);
+
     }
     
     private void OnStopGame()
