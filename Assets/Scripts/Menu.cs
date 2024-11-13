@@ -43,6 +43,8 @@ public class Menu: MonoBehaviour, IMainMenu
 
     private void startGameButtonOnClick()
     {
+        if(FieldWidth * FieldHeight % 2 != 0)
+            return;
         startMenuParent.SetActive(false);
         StartGame!.Invoke();
     }
