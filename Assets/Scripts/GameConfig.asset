@@ -35,7 +35,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8bcb07d9c2c4c484caf61c33f48e3dd8, type: 3}
   - {fileID: 21300000, guid: f84b6dd0347a94f4a9a69ac911fc1f9d, type: 3}
   cardBackSprite: {fileID: 21300000, guid: f1191f8d2b2b9784fa6ed9188da4a79e, type: 3}
-  fieldSpacing: 20
   maxFieldSideDimension: 8
-  flipUnmatchedCardTime: 0.3
-  hideCardTime: 0.3
+  flip90CardTime: 0.25
+  hideCardTime: 0.5
+  cardClickedDelay: 0.6
+  bounceTime: 0.7

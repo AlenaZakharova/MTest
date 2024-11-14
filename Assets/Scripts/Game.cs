@@ -10,9 +10,7 @@ public class Game: IGame
     private int _selectedCardValue;
     private int _selectedCardIndex;
     private int _cardsLeft;
-    
     private List<int> _cardValues = new List<int>();
-
     public bool GameIsOn { get; private set; }
 
     public Game(IField field, IMainMenu menu, GameConfig config)
@@ -21,12 +19,13 @@ public class Game: IGame
         _menu = menu;
         _field = field;
         _menu.StartGame += OnStartGame;
-        _menu.StopGame += OnStopGame;
+        _menu.StopGame += OnStopGameButtonClicked;
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
     }
 
     private void OnStartGame()
     {
+        _menu.ShowGameMenu();
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
         SetUpCards();
         _selectedCardValue = -1;
@@ -69,8 +68,7 @@ public class Game: IGame
                 _field.Cards[_selectedCardIndex].Hide();
                 _field.Cards[cardIndex].Hide();
                 _cardsLeft -= 2;
-                if (_cardsLeft == 0)
-                    OnStopGame();
+                CheckWin();
             }
             else
             {
@@ -82,7 +80,20 @@ public class Game: IGame
         }
     }
 
-    private void OnStopGame()
+    private void CheckWin()
+    {
+        if (_cardsLeft != 0) return;
+        StopGame();
+        _menu.ShowWin();
+    }
+
+    private void OnStopGameButtonClicked()
+    {
+        StopGame();
+        _menu.ShowMainMenu();
+    }
+
+    private void StopGame()
     {
         GameIsOn = false;
         foreach (var card in _field.Cards)

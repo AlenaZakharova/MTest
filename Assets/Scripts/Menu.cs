@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using Interfaces;
 using TMPro;
@@ -11,17 +12,38 @@ public class Menu: MonoBehaviour, IMainMenu
     [SerializeField] private Slider widthSlider;
     [SerializeField] private TextMeshProUGUI heightValue;
     [SerializeField] private TextMeshProUGUI widthValue;
+    [SerializeField] private RectTransform instructionsRectTransform;
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button stopGameButton;
+    [SerializeField] private Button returnToMenuButton;
     [SerializeField] private GameObject startMenuParent;
+    [SerializeField] private GameObject winPanelParent;
 
     private GameConfig _config;
 
     public event Action StartGame;
     public event Action StopGame;
-
     public int FieldWidth => (int)widthSlider.value;
     public int FieldHeight => (int)heightSlider.value;
+    
+    public void ShowWin()
+    {
+        stopGameButton.gameObject.SetActive(false);
+        winPanelParent.SetActive(true);
+    }
+    public void ShowMainMenu()
+    {
+        startMenuParent.SetActive(true);
+        winPanelParent.SetActive(false);
+        stopGameButton.gameObject.SetActive(false);
+    }
+
+    public void ShowGameMenu()
+    {
+        startMenuParent.SetActive(false);
+        winPanelParent.SetActive(false);
+        stopGameButton.gameObject.SetActive(true);
+    }
 
     public void SetUp(GameConfig gameConfig)
     {
@@ -32,31 +54,45 @@ public class Menu: MonoBehaviour, IMainMenu
 
     private void OnEnable()
     {
-        startGameButton.onClick.AddListener(startGameButtonOnClick);
-        stopGameButton.onClick.AddListener(stopGameButtonOnClick);
+        startGameButton.onClick.AddListener(StartGameButtonOnClick);
+        stopGameButton.onClick.AddListener(StopGameButtonOnClick);
+        returnToMenuButton.onClick.AddListener(StopGameButtonOnClick);
         heightSlider.onValueChanged.AddListener(UpdateHeight); 
         widthSlider.onValueChanged.AddListener(UpdateWidth); 
         
         UpdateHeight(FieldHeight);
         UpdateWidth(FieldWidth);
+
+        ShowMainMenu();
     }
 
-    private void startGameButtonOnClick()
+    private void StartGameButtonOnClick()
     {
-        if(FieldWidth * FieldHeight % 2 != 0)
-            return;
-        startMenuParent.SetActive(false);
-        StartGame?.Invoke();
+        if (FieldWidth * FieldHeight % 2 != 0)
+            StartCoroutine(BounceInstructions());
+        else
+        {
+            startMenuParent.SetActive(false);
+            StartGame?.Invoke();
+        }
     }
-    private void stopGameButtonOnClick()
+
+    private IEnumerator BounceInstructions()
     {
-        startMenuParent.SetActive(true);
+        var t = 0.0f;
+        while (t <= _config.BounceTime)
+        {
+            t += Time.deltaTime/_config.BounceTime;
+            var scaledValue = Mathf.Sin(Mathf.Lerp(0.0f, Mathf.PI, t * Mathf.PI))/3.0f;
+            instructionsRectTransform.localScale = Vector3.one + new Vector3(scaledValue, scaledValue, 1);
+            yield return null;
+        }
+        instructionsRectTransform.localScale = Vector3.one;
+    }
+
+    private void StopGameButtonOnClick()
+    {
         StopGame?.Invoke();
-    }
-
-    private void OnDisable()
-    {
-        startGameButton.onClick.RemoveListener(startGameButtonOnClick);
     }
 
     private void UpdateWidth(float count)
@@ -69,4 +105,11 @@ public class Menu: MonoBehaviour, IMainMenu
         heightValue.text = count.ToString(CultureInfo.InvariantCulture);
     }
 
+    private void OnDisable()
+    {
+        startGameButton.onClick.RemoveListener(StartGameButtonOnClick);
+        stopGameButton.onClick.RemoveListener(StopGameButtonOnClick);
+        returnToMenuButton.onClick.RemoveListener(StopGameButtonOnClick);
+        heightSlider.onValueChanged.RemoveListener(UpdateHeight); 
+    }
 }
