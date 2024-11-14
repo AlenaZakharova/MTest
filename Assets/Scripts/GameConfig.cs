@@ -8,15 +8,22 @@ public class GameConfig : ScriptableObject
     [SerializeField] private Sprite cardBackSprite;
 
     [Header("UI")] 
-    [SerializeField] private int fieldSpacing = 20;
-
     [SerializeField] private int maxFieldSideDimension = 8;
+    
+    [Header("Timing")] 
+    [SerializeField] private float flip90CardTime = 0.25f;
+    [SerializeField] private float hideCardTime = 0.2f;
+    [SerializeField] private float cardClickedDelay = 0.6f;
       
     //Sprites
     public Sprite[] CardImageSprites => cardImageSprites;
     public Sprite CardBackSprite => cardBackSprite;
     
     //UI
-    public int FieldSpacing => fieldSpacing;
     public int MaxFieldSideDimension => maxFieldSideDimension;
+    
+    //Timing
+    public float Flip90CardTime => flip90CardTime;
+    public float HideCardTime => hideCardTime;
+    public float CardClickedDelay => cardClickedDelay;
 }

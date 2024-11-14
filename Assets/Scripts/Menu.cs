@@ -46,12 +46,12 @@ public class Menu: MonoBehaviour, IMainMenu
         if(FieldWidth * FieldHeight % 2 != 0)
             return;
         startMenuParent.SetActive(false);
-        StartGame!.Invoke();
+        StartGame?.Invoke();
     }
     private void stopGameButtonOnClick()
     {
         startMenuParent.SetActive(true);
-        StopGame!.Invoke();
+        StopGame?.Invoke();
     }
 
     private void OnDisable()

@@ -7,6 +7,9 @@ public class Game: IGame
     private GameConfig _config;
     private IMainMenu _menu;
     private IField _field;
+    private int _selectedCardValue;
+    private int _selectedCardIndex;
+    private int _cardsLeft;
     
     private List<int> _cardValues = new List<int>();
 
@@ -17,7 +20,6 @@ public class Game: IGame
         _config = config;
         _menu = menu;
         _field = field;
-
         _menu.StartGame += OnStartGame;
         _menu.StopGame += OnStopGame;
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
@@ -27,7 +29,7 @@ public class Game: IGame
     {
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
         SetUpCards();
-
+        _selectedCardValue = -1;
         GameIsOn = true;
     }
 
@@ -41,11 +43,40 @@ public class Game: IGame
             _cardValues.Add(spriteIndex);
             _cardValues.Add(spriteIndex);
         }
-        
         _cardValues.Shuffle();
-
         for (var i = 0; i < cardsCount; i++)
-            _field.Cards[i].SetUp(_config.CardBackSprite, _config.CardImageSprites[_cardValues[i]], this);
+        {
+            _field.Cards[i].SetUp(i, _config.CardBackSprite, _config.CardImageSprites[_cardValues[i]], _config, this);
+            _field.Cards[i].CardClicked += OnCardClicked;
+        }
+    }
+
+    private void OnCardClicked(int cardIndex)
+    {
+        // first card selected
+        if (_selectedCardValue == -1)
+        {
+            _selectedCardValue = _cardValues[cardIndex];
+            _selectedCardIndex = cardIndex;
+        }
+        else
+        { // second card selected
+            if (_selectedCardValue == _cardValues[cardIndex])
+            {
+                //correctly matched
+                _field.Cards[_selectedCardIndex].Hide();
+                _field.Cards[cardIndex].Hide();
+                _cardsLeft -= 2;
+                //CheckGameWin();
+            }
+            else
+            {
+                // incorrectly matched
+                _field.Cards[_selectedCardIndex].Flip();
+                _field.Cards[cardIndex].Flip();
+            }
+            _selectedCardIndex = _selectedCardValue = -1;
+        }
     }
 
     private void OnStopGame()
@@ -54,12 +85,12 @@ public class Game: IGame
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
     }
 
-    ~Game()
+    /*~Game()
     {
         if (_menu != null)
         {
             _menu!.StartGame -= OnStartGame;
             _menu!.StopGame -= OnStopGame;
         }
-    }
+    }*/
 }

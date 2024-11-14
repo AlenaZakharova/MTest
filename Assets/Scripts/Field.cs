@@ -53,6 +53,7 @@ public class Field : MonoBehaviour, IField
         _fieldTransform.GetComponentsInChildren<Card>().ToList().ForEach(card =>
         {
             _cards.Remove(card);
+            card.ResetCardState();
             Lean.Pool.LeanPool.Despawn(card);
         });
         

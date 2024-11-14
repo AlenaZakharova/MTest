@@ -37,3 +37,5 @@ MonoBehaviour:
   cardBackSprite: {fileID: 21300000, guid: f1191f8d2b2b9784fa6ed9188da4a79e, type: 3}
   fieldSpacing: 20
   maxFieldSideDimension: 8
+  flipUnmatchedCardTime: 0.3
+  hideCardTime: 0.3

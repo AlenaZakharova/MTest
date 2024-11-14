@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Interfaces
 {
     public interface ICard
     {
-        public void SetUp(Sprite backSide, Sprite frontSide, IGame game);
+        public void SetUp(int indexInField, Sprite backSide, Sprite frontSide, GameConfig gameConfig, IGame game);
         public void Hide();
+        public void Flip();
+        public event Action<int> CardClicked;
     }
 }
