@@ -13,6 +13,7 @@ public class Menu: MonoBehaviour, IMenu
     [SerializeField] private TextMeshProUGUI heightValue;
     [SerializeField] private TextMeshProUGUI widthValue;
     [SerializeField] private RectTransform instructionsRectTransform;
+    [SerializeField] private TextMeshProUGUI victoryCountValue;
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button stopGameButton;
     [SerializeField] private Button returnToMenuButton;
@@ -33,6 +34,11 @@ public class Menu: MonoBehaviour, IMenu
     {
         turnsValue.text = turnsCount.ToString();
         matchesValue.text = matchesCount.ToString();
+    }
+
+    public void UpdateVictoryCount(int count)
+    {
+        victoryCountValue.text = count.ToString();
     }
 
     public void ShowWin()

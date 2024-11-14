@@ -15,6 +15,7 @@ namespace Interfaces
         public int FieldHeight { get; }
 
         public void UpdatePlayerCountValues(int turnsCount, int matchesCount);
+        public void UpdateVictoryCount(int count);
 
     }
 }
