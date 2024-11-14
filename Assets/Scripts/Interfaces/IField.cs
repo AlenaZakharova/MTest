@@ -6,6 +6,7 @@ namespace Interfaces
     {
         public void SetUp(GameConfig gameConfig);
         public void RebuildField(int width, int height);
+        public void ShowAllCardsBeforePlaying();
         public IReadOnlyList<ICard> Cards { get; }
     }
 }

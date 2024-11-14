@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
@@ -9,7 +10,7 @@ public class Field : MonoBehaviour, IField
     [SerializeField] private Card cardPrefab;
     [SerializeField] private GameObject rowPrefab;
 
-    private List<GameObject> _rows = new List<GameObject>{ };
+    private List<GameObject> _rows = new List<GameObject> { };
     private List<Card> _cards = new List<Card>();
     private Transform _fieldTransform;
 
@@ -22,6 +23,21 @@ public class Field : MonoBehaviour, IField
         _config = gameConfig;
     }
 
+    public void ShowAllCardsBeforePlaying()
+    {
+        StartCoroutine(ShowCardsBeforePlaying());
+    }
+    
+    private IEnumerator ShowCardsBeforePlaying()
+    {
+        foreach (var card in Cards)
+            card.Flip();   
+        yield return new WaitForSeconds(_config.ShowAllCardsTime);
+        foreach (var card in Cards)
+            card.Flip();
+    }
+
+
     private void OnEnable()
     {
         _fieldTransform = transform;
@@ -29,9 +45,9 @@ public class Field : MonoBehaviour, IField
 
     public void RebuildField(int width, int height)
     {
-        if(_rows.Count > 0 || _cards.Count > 0)
+        if (_rows.Count > 0 || _cards.Count > 0)
             DespawnFieldChildren();
-        
+
         for (int i = 0; i < height; i++)
         {
             var rowGameObject = Lean.Pool.LeanPool.Spawn(rowPrefab);
@@ -56,7 +72,7 @@ public class Field : MonoBehaviour, IField
             card.ResetCardState();
             Lean.Pool.LeanPool.Despawn(card);
         });
-        
+
         _fieldTransform.GetComponentsInChildren<HorizontalLayoutGroup>().ToList().ForEach(row =>
         {
             _rows.Remove(row.gameObject);

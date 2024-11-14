@@ -34,6 +34,7 @@ public class Game: IGame
         SetUpCards();
         _selectedCardValue = -1;
         _selectedCardIndex = -1;
+        _field.ShowAllCardsBeforePlaying();
         GameIsOn = true;
     }
 

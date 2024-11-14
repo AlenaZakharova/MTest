@@ -15,6 +15,7 @@ public class GameConfig : ScriptableObject
     [SerializeField] private float hideCardTime = 0.2f;
     [SerializeField] private float cardClickedDelay = 0.6f;
     [SerializeField] private float bounceTime = 0.5f;
+    [SerializeField] private float showAllCardsTime = 2f;
       
     //Sprites
     public Sprite[] CardImageSprites => cardImageSprites;
@@ -28,4 +29,5 @@ public class GameConfig : ScriptableObject
     public float HideCardTime => hideCardTime;
     public float CardClickedDelay => cardClickedDelay;
     public float BounceTime => bounceTime;
+    public float ShowAllCardsTime => showAllCardsTime;
 }
