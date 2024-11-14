@@ -30,6 +30,8 @@ public class Game: IGame
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
         SetUpCards();
         _selectedCardValue = -1;
+        _selectedCardIndex = -1;
+        _cardsLeft = _menu.FieldWidth * _menu.FieldHeight;
         GameIsOn = true;
     }
 
@@ -67,7 +69,8 @@ public class Game: IGame
                 _field.Cards[_selectedCardIndex].Hide();
                 _field.Cards[cardIndex].Hide();
                 _cardsLeft -= 2;
-                //CheckGameWin();
+                if (_cardsLeft == 0)
+                    OnStopGame();
             }
             else
             {
@@ -82,15 +85,8 @@ public class Game: IGame
     private void OnStopGame()
     {
         GameIsOn = false;
+        foreach (var card in _field.Cards)
+            card.CardClicked -= OnCardClicked;
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
     }
-
-    /*~Game()
-    {
-        if (_menu != null)
-        {
-            _menu!.StartGame -= OnStartGame;
-            _menu!.StopGame -= OnStopGame;
-        }
-    }*/
 }
