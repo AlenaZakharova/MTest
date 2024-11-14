@@ -16,11 +16,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 12bba31e10a26b645908ca35cce3ac2a, type: 3}
   - {fileID: 21300000, guid: 84d6a36e47e8f9042a960a8b033203a1, type: 3}
   - {fileID: 21300000, guid: 6f6648c32a819be4a87ef3bad2807bad, type: 3}
-  - {fileID: 21300000, guid: d1debd018f9877c408ca2c35857bb8c2, type: 3}
-  - {fileID: 21300000, guid: cee802c4711b2cc4c9be089c2d913ba9, type: 3}
-  - {fileID: 21300000, guid: 8c9bfd928f78cb541b9b79cfb995e5ae, type: 3}
-  - {fileID: 21300000, guid: 0c6de69acca756c409be4810a8510ac5, type: 3}
-  - {fileID: 21300000, guid: 4097dec1e9a0ede4c85bf4caa28e9bcf, type: 3}
   - {fileID: 21300000, guid: 1ff1175d56df9eb4f8cfa0ba429d9254, type: 3}
   - {fileID: 21300000, guid: 54f8589e2ef2f7a4e875a51ae49b1e7b, type: 3}
   - {fileID: 21300000, guid: 469c2629c08b96944b6e1f3575449d4b, type: 3}
@@ -34,9 +29,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f66c057114b8725409847a8a8e83a75b, type: 3}
   - {fileID: 21300000, guid: 8bcb07d9c2c4c484caf61c33f48e3dd8, type: 3}
   - {fileID: 21300000, guid: f84b6dd0347a94f4a9a69ac911fc1f9d, type: 3}
+  - {fileID: 21300000, guid: d1debd018f9877c408ca2c35857bb8c2, type: 3}
+  - {fileID: 21300000, guid: cee802c4711b2cc4c9be089c2d913ba9, type: 3}
+  - {fileID: 21300000, guid: 8c9bfd928f78cb541b9b79cfb995e5ae, type: 3}
+  - {fileID: 21300000, guid: 0c6de69acca756c409be4810a8510ac5, type: 3}
+  - {fileID: 21300000, guid: 4097dec1e9a0ede4c85bf4caa28e9bcf, type: 3}
   cardBackSprite: {fileID: 21300000, guid: f1191f8d2b2b9784fa6ed9188da4a79e, type: 3}
   maxFieldSideDimension: 8
   flip90CardTime: 0.25
   hideCardTime: 0.5
   cardClickedDelay: 0.6
   bounceTime: 0.7
+  showAllCardsTime: 2
