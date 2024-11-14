@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Menu: MonoBehaviour, IMainMenu
+public class Menu: MonoBehaviour, IMenu
 {
     [SerializeField] private Slider heightSlider;
     [SerializeField] private Slider widthSlider;
@@ -16,8 +16,11 @@ public class Menu: MonoBehaviour, IMainMenu
     [SerializeField] private Button startGameButton;
     [SerializeField] private Button stopGameButton;
     [SerializeField] private Button returnToMenuButton;
+    [SerializeField] private TextMeshProUGUI turnsValue;
+    [SerializeField] private TextMeshProUGUI matchesValue;
     [SerializeField] private GameObject startMenuParent;
     [SerializeField] private GameObject winPanelParent;
+    [SerializeField] private GameObject gamePanelParent;
 
     private GameConfig _config;
 
@@ -26,23 +29,29 @@ public class Menu: MonoBehaviour, IMainMenu
     public int FieldWidth => (int)widthSlider.value;
     public int FieldHeight => (int)heightSlider.value;
     
+    public void UpdatePlayerCountValues(int turnsCount, int matchesCount)
+    {
+        turnsValue.text = turnsCount.ToString();
+        matchesValue.text = matchesCount.ToString();
+    }
+
     public void ShowWin()
     {
-        stopGameButton.gameObject.SetActive(false);
         winPanelParent.SetActive(true);
+        gamePanelParent.SetActive(false);
     }
     public void ShowMainMenu()
     {
         startMenuParent.SetActive(true);
         winPanelParent.SetActive(false);
-        stopGameButton.gameObject.SetActive(false);
+        gamePanelParent.gameObject.SetActive(false);
     }
 
     public void ShowGameMenu()
     {
         startMenuParent.SetActive(false);
         winPanelParent.SetActive(false);
-        stopGameButton.gameObject.SetActive(true);
+        gamePanelParent.gameObject.SetActive(true);
     }
 
     public void SetUp(GameConfig gameConfig)

@@ -2,7 +2,7 @@
 
 namespace Interfaces
 {
-    public interface IMainMenu
+    public interface IMenu
     {
         public void SetUp(GameConfig gameConfig);
         public void ShowWin();
@@ -13,5 +13,8 @@ namespace Interfaces
         
         public int FieldWidth { get; }
         public int FieldHeight { get; }
+
+        public void UpdatePlayerCountValues(int turnsCount, int matchesCount);
+
     }
 }

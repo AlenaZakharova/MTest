@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class Game: IGame
 {
-    private GameConfig _config;
-    private IMainMenu _menu;
-    private IField _field;
+    private readonly GameConfig _config;
+    private readonly IMenu _menu;
+    private readonly IField _field;
+    private readonly IScoreCounter _scoreCounter;
     private int _selectedCardValue;
     private int _selectedCardIndex;
-    private int _cardsLeft;
-    private List<int> _cardValues = new List<int>();
+    private readonly List<int> _cardValues = new List<int>();
+
     public bool GameIsOn { get; private set; }
 
-    public Game(IField field, IMainMenu menu, GameConfig config)
+    public Game(IField field, IMenu menu, IScoreCounter scoreCounter, GameConfig config)
     {
         _config = config;
         _menu = menu;
         _field = field;
+        _scoreCounter = scoreCounter;
+        _scoreCounter.CardsAreOut += StopGame;
         _menu.StartGame += OnStartGame;
         _menu.StopGame += OnStopGameButtonClicked;
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
@@ -25,12 +28,12 @@ public class Game: IGame
 
     private void OnStartGame()
     {
+        _scoreCounter.StartCountCards(_menu.FieldWidth * _menu.FieldHeight);
         _menu.ShowGameMenu();
         _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
         SetUpCards();
         _selectedCardValue = -1;
         _selectedCardIndex = -1;
-        _cardsLeft = _menu.FieldWidth * _menu.FieldHeight;
         GameIsOn = true;
     }
 
@@ -54,6 +57,7 @@ public class Game: IGame
 
     private void OnCardClicked(int cardIndex)
     {
+        _scoreCounter.AddTurn();
         // first card selected
         if (_selectedCardValue == -1)
         {
@@ -67,8 +71,7 @@ public class Game: IGame
                 //correctly matched
                 _field.Cards[_selectedCardIndex].Hide();
                 _field.Cards[cardIndex].Hide();
-                _cardsLeft -= 2;
-                CheckWin();
+                _scoreCounter.AddMatch();
             }
             else
             {
@@ -78,13 +81,6 @@ public class Game: IGame
             }
             _selectedCardIndex = _selectedCardValue = -1;
         }
-    }
-
-    private void CheckWin()
-    {
-        if (_cardsLeft != 0) return;
-        StopGame();
-        _menu.ShowWin();
     }
 
     private void OnStopGameButtonClicked()
