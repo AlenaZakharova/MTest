@@ -18,15 +18,21 @@ public class Meta: MonoBehaviour
         field.SetUp(config);
         menu.SetUp(config);
         menu.UpdateVictoryCount(_player.VictoryCount);
-        _scoreCounter = new ScoreCounter(menu, audioController);
+        _scoreCounter = new ScoreCounter(menu);
         _scoreCounter.CardsAreOut += PlayerWin;
         _game = new Game(field, menu, _scoreCounter, config);
+        
+        menu.StartGame += audioController.PlayBuildCardFieldSound;
+        _game.CardClicked += audioController.PlayFlipSound;
         _game.Mismatched += audioController.PlayCardMismatchedSound;
+        _game.Matched += audioController.PlayCardMatchedSound;
     }
+
 
     private void PlayerWin()
     {
         _player.AddVictory();
         menu.UpdateVictoryCount(_player.VictoryCount);
+        audioController.PlayWinSound();
     }
 }

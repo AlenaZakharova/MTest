@@ -14,7 +14,9 @@ public class Game: IGame
     private readonly List<int> _cardValues = new List<int>();
 
     public bool GameIsOn { get; private set; }
+    public event Action Matched;
     public event Action Mismatched;
+    public event Action CardClicked;
 
     public Game(IField field, IMenu menu, IScoreCounter scoreCounter, GameConfig config)
     {
@@ -60,6 +62,7 @@ public class Game: IGame
 
     private void OnCardClicked(int cardIndex)
     {
+        CardClicked?.Invoke();
         _scoreCounter.AddTurn();
         // first card selected
         if (_selectedCardValue == -1)
@@ -75,6 +78,7 @@ public class Game: IGame
                 _field.Cards[_selectedCardIndex].Hide();
                 _field.Cards[cardIndex].Hide();
                 _scoreCounter.AddMatch();
+                Matched?.Invoke();
             }
             else
             {
