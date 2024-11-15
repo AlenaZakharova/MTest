@@ -31,10 +31,10 @@ public class Field : MonoBehaviour, IField
     private IEnumerator ShowCardsBeforePlaying()
     {
         foreach (var card in Cards)
-            card.Flip();   
+            card.Flip(false);   
         yield return new WaitForSeconds(_config.ShowAllCardsTime);
         foreach (var card in Cards)
-            card.Flip();
+            card.Flip(false);
     }
 
 
@@ -43,7 +43,19 @@ public class Field : MonoBehaviour, IField
         _fieldTransform = transform;
     }
 
-    public void RebuildField(int width, int height)
+    public void RebuildField(int width, int height, bool withDelay)
+    {
+        StartCoroutine(RebuildFieldWithDelay(width, height, withDelay));
+    }
+
+    private IEnumerator RebuildFieldWithDelay(int width, int height, bool withDelay)
+    {
+        if(withDelay)
+            yield return new WaitForSeconds(_config.ShowWinPanelDelay); 
+        RebuildField(width, height);
+    }
+
+    private void RebuildField(int width, int height)
     {
         if (_rows.Count > 0 || _cards.Count > 0)
             DespawnFieldChildren();

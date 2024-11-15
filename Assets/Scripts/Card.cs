@@ -18,7 +18,6 @@ public class Card : MonoBehaviour, ICard
     private bool _turning;
     private IGame _game;
     private int _indexInField;
-
     public event Action<int> CardClicked;
 
     public void SetUp(int indexInField, Sprite backSide, Sprite frontSide, GameConfig gameConfig, IGame game)
@@ -39,20 +38,14 @@ public class Card : MonoBehaviour, ICard
         if (_flipped || _turning) return;
         if (!_game.GameIsOn) return;
         Flip();
-        StartCoroutine(RiseCardClickedEventSuspended());
-    }
-    
-    private IEnumerator RiseCardClickedEventSuspended()
-    {
-        yield return new WaitForSeconds(_config.CardClickedDelay);
         CardClicked?.Invoke(_indexInField);
     }
-    
+
     // perform a 180 degree flip
-    public void Flip()
+    public void Flip(bool withDelay = false)
     {
         _turning = true;
-        StartCoroutine(Flip90(transform, true));
+        StartCoroutine(Flip90(transform, true, withDelay));
     }
 
     public void Hide()
@@ -63,6 +56,7 @@ public class Card : MonoBehaviour, ICard
     
     private IEnumerator ReduceSizeAndHide()
     {
+        yield return new WaitForSeconds(_config.CardClickedDelay);
         var t = 0.0f;
         while (t <=_config.HideCardTime)
         {
@@ -83,8 +77,10 @@ public class Card : MonoBehaviour, ICard
         cardImage.gameObject.SetActive(frontSide);
     }
 
-    private IEnumerator Flip90(Transform thisTransform, bool changeSprite)
+    private IEnumerator Flip90(Transform thisTransform, bool changeSprite, bool withDelay = false)
     {
+        if(withDelay)
+            yield return new WaitForSeconds(_config.CardClickedDelay);
         var rotation = thisTransform.rotation;
         Quaternion startRotation = rotation;
         Quaternion endRotation = rotation * Quaternion.Euler(new Vector3(0, 90, 0));

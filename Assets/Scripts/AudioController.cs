@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioController : MonoBehaviour
@@ -8,6 +6,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioSource setUpCards;
     [SerializeField] private AudioSource win;
     [SerializeField] private AudioSource cardMatched;
+    [SerializeField] private AudioSource cardMismatched;
 
     public void PlayFlipSound()
     {
@@ -25,5 +24,9 @@ public class AudioController : MonoBehaviour
     public void PlayCardMatchedSound()
     {
         cardMatched.Play();
+    }
+    public void PlayCardMismatchedSound()
+    {
+        cardMismatched.Play();
     }
 }

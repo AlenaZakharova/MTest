@@ -21,6 +21,7 @@ public class Meta: MonoBehaviour
         _scoreCounter = new ScoreCounter(menu, audioController);
         _scoreCounter.CardsAreOut += PlayerWin;
         _game = new Game(field, menu, _scoreCounter, config);
+        _game.Mismatched += audioController.PlayCardMismatchedSound;
     }
 
     private void PlayerWin()

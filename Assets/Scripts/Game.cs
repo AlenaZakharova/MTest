@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interfaces;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Game: IGame
 {
@@ -13,6 +14,7 @@ public class Game: IGame
     private readonly List<int> _cardValues = new List<int>();
 
     public bool GameIsOn { get; private set; }
+    public event Action Mismatched;
 
     public Game(IField field, IMenu menu, IScoreCounter scoreCounter, GameConfig config)
     {
@@ -23,14 +25,14 @@ public class Game: IGame
         _scoreCounter.CardsAreOut += StopGame;
         _menu.StartGame += OnStartGame;
         _menu.StopGame += OnStopGameButtonClicked;
-        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
+        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight,false);
     }
 
     private void OnStartGame()
     {
         _scoreCounter.StartCountCards(_menu.FieldWidth * _menu.FieldHeight);
         _menu.ShowGameMenu();
-        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
+        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight, false);
         SetUpCards();
         _selectedCardValue = -1;
         _selectedCardIndex = -1;
@@ -77,8 +79,9 @@ public class Game: IGame
             else
             {
                 // incorrectly matched
-                _field.Cards[_selectedCardIndex].Flip();
-                _field.Cards[cardIndex].Flip();
+                _field.Cards[_selectedCardIndex].Flip(true);
+                _field.Cards[cardIndex].Flip(true);
+                Mismatched?.Invoke();
             }
             _selectedCardIndex = _selectedCardValue = -1;
         }
@@ -95,6 +98,6 @@ public class Game: IGame
         GameIsOn = false;
         foreach (var card in _field.Cards)
             card.CardClicked -= OnCardClicked;
-        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight);
+        _field.RebuildField(_menu.FieldWidth, _menu.FieldHeight, true);
     }
 }

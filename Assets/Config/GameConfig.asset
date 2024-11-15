@@ -41,3 +41,4 @@ MonoBehaviour:
   cardClickedDelay: 0.6
   bounceTime: 0.7
   showAllCardsTime: 2
+  showWinPanelDelay: 1

@@ -43,9 +43,16 @@ public class Menu: MonoBehaviour, IMenu
 
     public void ShowWin()
     {
+        StartCoroutine(ShowWinWithDelay());
+    }
+
+    private IEnumerator ShowWinWithDelay()
+    {
+        yield return new WaitForSeconds(_config.ShowWinPanelDelay); 
         winPanelParent.SetActive(true);
         gamePanelParent.SetActive(false);
     }
+
     public void ShowMainMenu()
     {
         startMenuParent.SetActive(true);
